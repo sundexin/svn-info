@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>SVN - 简明指南</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h1>SVN - 简明指南</h1>
+
+            <h3>助你入门 SVN 的简明指南，木有高深内容 ;)</h3>
+
+            <p>
+                <small>By 孙得心 <a href="http://sundexin.com/lolooo">sundexin.com</a></small>
+            </p>
+        </section>
+
+        <section data-background="#ddd">
+            <h2>简介</h2>
+
+            <p style="text-align: left;">SVN 是 Subversion 的简称，是一个开放源代码的版本控制系统；类似的版本控制系统还有 CVS、GIT 等。</p>
+        </section>
+
+        <section data-background="#4d7e65">
+            <h2>名词解释</h2>
+            <table>
+                <tbody>
+                <tr>
+                    <td width="40%">修订版、版本号(Revision)</td>
+                    <td>可以认为是某个文件在其生命周期内各个保存的快照,每个快照和一个时间区间对应</td>
+                <tr>
+                <tr>
+                    <td>版本库、配置库(Repository)</td>
+                    <td>存放修订版的数据库</td>
+                <tr>
+                <tr>
+                    <td>本地工作拷贝(Local working copy)</td>
+                    <td>修订版在本地的副本</td>
+                <tr>
+                <tr>
+                    <td>检出(Check out)</td>
+                    <td>从服务器的版本库中取出修订版成为本地副本</td>
+                <tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section data-background="#4d7e65">
+            <h2>名词解释</h2>
+            <table>
+                <tbody>
+                <tr>
+                    <td width="40%">版本号计数方式</td>
+                    <td>有两种策略,基于文件的计数和基于仓库的计数,
+                        Subversion 使用后者
+                    </td>
+                <tr>
+                <tr>
+                    <td>合并(Merging)</td>
+                    <td>将分支的修订版合并为一个新的修订版</td>
+                <tr>
+                <tr>
+                    <td>锁(Locking)</td>
+                    <td>标记正在修改的状态</td>
+                <tr>
+                <tr>
+                    <td>冲突(Conflict)</td>
+                    <td>并发版本控制时防止修订版混乱的错误机制</td>
+                <tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section data-background="#b5533c">
+            <h2>主线、基线、分支</h2>
+            <ul>
+                <li>
+                    <p><strong>主线(Trunk)</strong></p>
+
+                    <p>代码、文档存放于此,按内容定义目录，分类存放。</p>
+                </li>
+
+                <li>
+                    <p><strong>基线(Tags)</strong></p>
+
+                    <p>Trunk某一版本的只读拷贝，用于打标签。</p>
+
+                    <p>标记发布版本，追查历史、回退使用。</p>
+                </li>
+
+                <li>
+                    <p><strong>分支(Branches)</strong></p>
+
+                    <p>用于多版本的并行开发。</p>
+
+                    <p>合并到主线时,可能会发生较多的冲突,建议有计划地使用分支。</p>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background="#b5533c">
+            <h2>主线、基线、分支</h2>
+
+            <p><img src="img/01.png"></p>
+        </section>
+
+        <section data-background="#369">
+            <h1>SVN 基本操作</h1>
+        </section>
+
+        <section data-background="#369">
+            <h2>SVN 基本操作 - 权限</h2>
+            <ul>
+                <li>
+                    <p><strong>SVN 地址</strong></p>
+
+                    <p>https://svn.intra.sina.com.cn/xxx/</p>
+
+                    <p>https://svn1.intra.sina.com.cn/xxx/</p>
+                </li>
+                <li>
+                    <p><strong>权限申请</strong></p>
+
+                    <p>找对应的 SVN 库管理员</p>
+                </li>
+                <li>
+                    <p><strong>按目录授权</strong></p>
+
+                    <p>只读权限(查看、下载到本地)</p>
+
+                    <p>读写权限(文件&文件夹的增、删、改、查)</p>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background="#369">
+            <h2>SVN 基本操作 - 协议</h2>
+            <ul>
+                <li>file://</li>
+                <li>http://</li>
+                <li>https://</li>
+                <li>svn://</li>
+                <li>svn+ssh://</li>
+            </ul>
+        </section>
+
+        <section data-background="#369">
+            <h2>SVN 基本操作 - 命令</h2>
+
+            <p>Help:</p>
+            <pre><code>svn help
+svn ?</code></pre>
+            <p>Usage:</p>
+            <pre><code>svn &lt;subcommand&gt; [options] [args]</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>SVN 基本操作 - 命令</h2>
+
+            <p>Available subcommands:</p>
+            <pre><code>add
+blame (praise, annotate, ann)
+cat
+changelist (cl)
+checkout (co)
+cleanup
+commit (ci)
+copy (cp)
+delete (del, remove, rm)
+diff (di)
+export
+help (?, h)
+import
+info
+list (ls)
+lock
+log
+merge
+mergeinfo
+mkdir
+move (mv, rename, ren)
+patch
+propdel (pdel, pd)
+propedit (pedit, pe)
+propget (pget, pg)
+proplist (plist, pl)
+propset (pset, ps)
+relocate
+resolve
+resolved
+revert
+status (stat, st)
+switch (sw)
+unlock
+update (up)
+upgrade</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Checkout</h2>
+            <p style="text-align: left;">SVN 目录映射到本地 working copy (当前文件夹),下载服务器上最新版文件</p>
+            <pre><code>svn checkout https://xxxxx/xxx/xxx
+svn co https://xxxxx/xxx/xxx</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Update</h2>
+            <p style="text-align: left;">更新本地 working copy</p>
+            <pre><code>svn update
+svn up</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Commit</h2>
+            <p style="text-align: left;">将本地修改上传到服务器</p>
+            <pre><code>svn commit -m "message"
+svn ci -m "message"</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Mkdir</h2>
+            <p style="text-align: left;">新建目录</p>
+            <pre><code>svn mkdir dirname</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Add</h2>
+            <p style="text-align: left;">本地文件上传到服务器 (commit 之后才真正上传)</p>
+            <pre><code>svn add filename</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Delete</h2>
+            <p style="text-align: left;">本地文件删除,commit 之后服务器上删除,查历史可以恢复</p>
+            <pre><code>svn delete filename</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Log</h2>
+            <p style="text-align: left;">查看当前目录的 commit 记录</p>
+            <pre><code>svn log</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Status</h2>
+            <p style="text-align: left;">查看本地文件修改情况</p>
+            <pre><code>svn status
+svn st</code></pre>
+            <p style="text-align: left;">返回值含义</p>
+            <pre><code>a 标记了要上传的文件
+? 本地私有文件,无版本标识
+d 本地删除了,但未上传
+m 本地修改了,但未上传
+K 加锁文件
+C 有冲突的文件
+! 有版本标识,但文件丢失或损坏
+I 没有版本标识,Subversion设置了忽略</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Info</h2>
+            <p style="text-align: left;">显示本地或远程条目的信息。</p>
+            <pre><code>svn info</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Diff</h2>
+            <p style="text-align: left;">本地文件修改情况对比。(仅针对文本文件)</p>
+            <pre><code>svn diff -r N:M path</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Cat</h2>
+            <p style="text-align: left;">查看最后一次 update 到本地的文件内容。</p>
+            <pre><code>svn cat filename</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Export</h2>
+            <p style="text-align: left;">SVN 文件下载到本地,不含 .svn 文件夹,代码上线时推荐使用。</p>
+            <pre><code>svn export https://xxx/xx/ localfolder</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Import</h2>
+            <p style="text-align: left;">本地文件上传到 SVN。</p>
+            <pre><code>svn import localfolder https://xxx/xxx/ -m "message"</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Revert</h2>
+            <p style="text-align: left;">放弃修改。</p>
+            <pre><code>svn revert filename</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Copy</h2>
+            <p style="text-align: left;">拷贝,版本分支和标签等概念都通过它实现。</p>
+            <pre><code>svn copy path/file_name newpath/new_file_name -m "xxxx"</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Move</h2>
+            <p style="text-align: left;">重命名目录/文件。</p>
+            <pre><code>svn move file_name new_file_name</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Cleanup</h2>
+            <p style="text-align: left;">本地 working copy 出现异常时使用。</p>
+            <pre><code>svn cleanup</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Merge</h2>
+            <p style="text-align: left;">合并分支到主干。</p>
+            <pre><code>svn merge -r N:M branch_path</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Resolve</h2>
+            <p style="text-align: left;">解决冲突。</p>
+            <pre><code>svn resolve file_name –accept mine-conflict
+svn resolve file_name –accept theirs-conflict</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Resolved</h2>
+            <p style="text-align: left;">标记冲突已解决。</p>
+            <pre><code>svn resolved file_name</code></pre>
+        </section>
+
+        <!--
+        <section data-background="#369">
+            <h2>Switch</h2>
+            <p style="text-align: left;">切换分支。</p>
+            <pre><code>svn switch url path</code></pre>
+        </section>
+
+        <section data-background="#369">
+            <h2>Relocate</h2>
+            <p style="text-align: left;">服务器地址变更时使用。</p>
+            <pre><code>svn relocate 原svn地址 新svn地址</code></pre>
+        </section>
+        -->
+
+        <section data-background="#369">
+            <h2>注意</h2>
+            <p style="text-align: left;">创建、移动、复制、删除必须使用 SVN 命令。</p>
+            <pre><code>svn move
+svn delete
+svn copy
+svn mkdir</code></pre>
+        </section>
+
+        <section data-background="#b5533c">
+            <h2>SVN 典型工作流程</h2>
+
+            <p><img src="img/02.png"></p>
+        </section>
+
+        <section data-background="#690">
+            <h2>良好的操作习惯</h2>
+            <ul>
+                <li>
+                    <p><strong>及时更新</strong></p>
+
+                    <p>本地 working copy 需要通过 Update 获得更新</p>
+
+                    <p>修改本地文件前,建议更新</p>
+
+                    <p>代码定期进行全目录的更新</p>
+                </li>
+                <li>
+                    <p><strong>上传正确的文件</strong></p>
+
+                    <p>文件直接更新即可,不要上传压缩包</p>
+
+                    <p>本机临时生成的文件,不要上传</p>
+
+                    <p>自动生成的文件,不要上传</p>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background="#690">
+            <h2>良好的操作习惯</h2>
+            <ul>
+                <li>
+                    <p><strong>正确上传文件</strong></p>
+
+                    <p>使用 SVN 命令将本地修改上传,避免删掉再上传,会造成版本丢失</p>
+                </li>
+
+                <li>
+                    <p><strong>原子操作</strong></p>
+
+                    <p>一次修改涉及的多个文件的,一次性全部上传到 SVN 服务器</p>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background="#690">
+            <h2>良好的操作习惯</h2>
+            <ul>
+                <li>
+                    <p><strong>区分 checkout 和 export</strong></p>
+
+                    <p>chekcout 会建立本地 working copy 和 SVN 服务器的映射,在本地每个目录下建立隐藏的 .svn 目录</p>
+
+                    <p>export 导出 SVN 目录,不带版本信息,不含 .svn 目录(上线时请使用 export)</p>
+                </li>
+
+                <li>
+                    <p><strong>谨慎加锁</strong></p>
+
+                    <p>SVN 锁,用于标记正在修改,建议只在关键文件修改前进行加锁、改完即刻上传解锁</p>
+
+                    <p>如果需要操作的文件被锁住,请主动联系加锁的同事</p>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background="#690">
+            <h2>良好的操作习惯</h2>
+            <ul>
+                <li>
+                    <p><strong>Log 信息</strong></p>
+
+                    <p>每次 commit 时,写清楚本次修改的信息, 比如 JIRA 号,修改功能描述, bug fix 信息</p>
+                </li>
+
+                <li>
+                    <p><strong>有计划地建立分支</strong></p>
+
+                    <p>SVN 自动合并不一定正确,合并后需检查。</p>
+                </li>
+            </ul>
+        </section>
+
+        <section data-background="#369">
+            <h1>Example</h1>
+        </section>
+
+        <section data-background="#ddd">
+            <h1>QA</h1>
+        </section>
+
+        <section data-background="#4d7e65">
+            <h1>Thanks!</h1>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+            {
+                src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: 'plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/highlight/highlight.js', async: true, condition: function () {
+                return !!document.querySelector('pre code');
+            }, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            {src: 'plugin/zoom-js/zoom.js', async: true},
+            {src: 'plugin/notes/notes.js', async: true}
+        ]
+    });
+
+</script>
+
+</body>
+</html>
